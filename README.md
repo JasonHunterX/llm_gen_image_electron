@@ -1,6 +1,6 @@
 # AI图片生成器
 
-一个使用Electron、Vue3和LangChain实现的AI图片生成应用，可以通过文本描述生成图片并保存到本地。
+一个使用Electron、Vue3和ollama实现的AI图片生成应用，可以通过文本描述生成图片并保存到本地。
 
 ## 功能特点
 
@@ -15,8 +15,6 @@
 - Electron - 跨平台桌面应用框架
 - Vue 3 - 前端框架
 - Vuex 4 - 状态管理
-- LangChain - AI模型集成
-- OpenAI API - 图片生成服务
 
 ## 开始使用
 
