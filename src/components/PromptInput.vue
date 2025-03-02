@@ -12,7 +12,10 @@
         <p class="shortcut">按 Ctrl+Enter 快速生成</p>
       </div>
       
-      <!-- 添加生成按钮 -->
+      <!-- 添加图片参数设置组件 -->
+      <ImageParamsSettings class="params-section" />
+      
+      <!-- 生成按钮 -->
       <button 
         @click="handleGenerate" 
         :disabled="isLoading || !hasPrompt" 
@@ -35,9 +38,13 @@
 <script>
 import { ref, computed, watch } from 'vue';
 import { useStore } from 'vuex';
+import ImageParamsSettings from './ImageParamsSettings.vue';
 
 export default {
   name: 'PromptInput',
+  components: {
+    ImageParamsSettings
+  },
   setup() {
     const store = useStore();
     const promptText = ref('');
@@ -48,6 +55,7 @@ export default {
     // 获取加载状态和错误信息
     const isLoading = computed(() => store.getters.isLoading);
     const error = computed(() => store.getters.getError);
+    
     const hasPrompt = computed(() => promptText.value.trim().length > 0);
     
     // 当store中的prompt变化时，更新本地的promptText
@@ -118,6 +126,12 @@ textarea:focus {
 .shortcut {
   font-style: italic;
   margin-top: 0.25rem;
+}
+
+/* 参数设置区域样式 */
+.params-section {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 /* 生成按钮样式 */

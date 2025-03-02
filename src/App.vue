@@ -2,13 +2,13 @@
   <div class="app-container">
     <!-- 可拖动区域 -->
     <div class="app-titlebar">
-      <!-- <div class="window-title">AI 图片生成器</div> -->
+      <!-- <div class="window-title">班大师Ai研究所</div> -->
     </div>
     
     <!-- 不可拖动的内容区域 -->
     <div class="app-content-wrapper">
       <header class="app-header">
-        <h1>AI 图片生成器</h1>
+        <h1>班大师Ai研究所</h1>
         <button class="settings-btn" @click="openSettings">
           <span class="icon">⚙️</span>
         </button>

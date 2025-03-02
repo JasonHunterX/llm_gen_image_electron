@@ -27,6 +27,9 @@ function createWindow() {
     },
   });
   
+  // 在这里添加窗口最大化的代码
+  mainWindow.maximize();
+  
   const startUrl = isDev
     ? 'http://localhost:3000'
     : url.format({

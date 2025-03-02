@@ -13,6 +13,14 @@ export default createStore({
       ollama: {
         apiUrl: 'http://127.0.0.1:11434',
         modelName: 'kevin_qwen:latest'
+      },
+      imageParams: {
+        width: 1024,
+        height: 1024,
+        seed: 100,
+        model: 'flux',
+        nologo: true,
+        enhance:false
       }
     },
     notification: null
@@ -49,6 +57,11 @@ export default createStore({
     setSettings(state, settings) {
       state.settings = { ...state.settings, ...settings };
     },
+    
+    updateImageParams(state, params) {
+      state.settings.imageParams = { ...state.settings.imageParams, ...params };
+    },
+    
     setNotification(state, notification) {
       state.notification = notification;
     },
@@ -92,6 +105,14 @@ export default createStore({
       if (savedSettings) {
         commit('setSettings', JSON.parse(savedSettings));
       }
+    },
+    
+    updateImageParams({ commit }, params) {
+      commit('updateImageParams', params);
+      // Save to localStorage to persist the changes
+      const settings = JSON.parse(localStorage.getItem('aiImageGeneratorSettings') || '{}');
+      settings.imageParams = params;
+      localStorage.setItem('aiImageGeneratorSettings', JSON.stringify(settings));
     }
   },
   getters: {
@@ -102,6 +123,7 @@ export default createStore({
     getError: state => state.error,
     getHistory: state => state.history,
     getSettings: state => state.settings,
-    getNotification: state => state.notification
+    getNotification: state => state.notification,  // 添加逗号
+    getImageParams: state => state.settings.imageParams  // 移到正确位置，移除多余的逗号
   }
 });

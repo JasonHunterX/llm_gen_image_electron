@@ -7,16 +7,22 @@ const MODEL_NAME ='kevin_qwen:latest';
 
 // 生成图片的函数
 export async function generateImage(prompt, settings) {
-  return await generateWithOllama(prompt, settings.ollama);
+  return await generateWithOllama(prompt, settings.ollama, settings.imageParams);
 }
 
 // Ollama模型的图片生成
-async function generateWithOllama(prompt, settings) {
+async function generateWithOllama(prompt, settings, imageParams) {
   try {
+    // 构建图片参数字符串
+    const imageParamsString = Object.entries(imageParams || {})
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&');
+    console.log('imageParamsString',imageParamsString)
+    console.log('prompt',prompt)
     const response = await axios.post(`${settings.apiUrl}/api/generate`, {
       model: settings.modelName,
       prompt: `你是一个 AI 图片生成助手。我将提供提示 ${prompt}，请基于此提示，以流畅且生动的英文描述图片内容，并将你的描述直接填充到以下 URL 的 {query} 占位符中:
-![image](https://image.pollinations.ai/prompt/{query}?width=1024&height=1024&seed=100&model=flux&nologo=true)`,
+![image](https://image.pollinations.ai/prompt/{query}?${imageParamsString})`,
       stream: false,
       options: {
         temperature: 0.7,
@@ -68,7 +74,10 @@ function extractImageUrl(responseText) {
   if (responseText.includes('pollinations.ai')) {
     const englishDescription = responseText.replace(/[\u4e00-\u9fa5]/g, '').trim();
     const cleanDescription = englishDescription.replace(/[^\w\s]/g, ' ').trim().replace(/\s+/g, '%20');
-    return `https://image.pollinations.ai/prompt/${cleanDescription}?width=1024&height=1024&seed=100&model=flux&nologo=true`;
+    
+    // 使用传入的图片参数构建URL
+    const imageParamsString = 'width=1024&height=1024&seed=100&model=flux&nologo=true';
+    return `https://image.pollinations.ai/prompt/${cleanDescription}?${imageParamsString}`;
   }
   
   throw new Error("无法从响应中提取图片URL");

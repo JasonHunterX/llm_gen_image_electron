@@ -6,18 +6,7 @@
     </div>
     
     <div class="result-section">
-      <!-- 移除 ImageGenerator 组件 -->
       <ImagePreview v-if="generatedImage" />
-    </div>
-    
-    <div class="history-section card" v-if="history.length > 0">
-      <h2>历史记录</h2>
-      <div class="history-grid">
-        <div v-for="item in history" :key="item.id" class="history-item">
-          <img :src="item.imageUrl" alt="生成的图片" @click="viewImage(item)" />
-          <p>{{ item.prompt }}</p>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -58,15 +47,46 @@ export default {
 
 <style scoped>
 .home-container {
-  max-width: 1200px;
+  height: calc(100vh - 60px); /* 假设顶部导航栏高度为60px，请根据实际情况调整 */
   margin: 0 auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row; /* 改为水平布局 */
   gap: 2rem;
+  align-items: flex-start;
+  padding: 2rem;
 }
 
 .prompt-section {
-  width: 100%;
+  width: 40%;
+  overflow-y: auto; /* 添加垂直滚动 */
+  padding: 1.5rem;
+}
+
+.result-section {
+  width: 60%;
+  overflow-y: auto; /* 添加垂直滚动 */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  /* padding: 1.5rem; */
+}
+
+/* 自定义滚动条样式 */
+.prompt-section::-webkit-scrollbar,
+.result-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.prompt-section::-webkit-scrollbar-thumb,
+.result-section::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 3px;
+}
+
+.prompt-section::-webkit-scrollbar-track,
+.result-section::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
 
 .prompt-section h2 {

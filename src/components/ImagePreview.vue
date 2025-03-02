@@ -91,6 +91,39 @@ export default {
       store.commit('setImageLoading', false);
     };
     
+    // 获取生成的图片URL
+    const generatedImage = computed(() => store.getters.getGeneratedImage);
+    
+    // 保存图片到本地
+    const saveImageToLocal = async () => {
+      if (!generatedImage.value) return;
+      
+      try {
+        const result = await window.electronAPI.saveImage(generatedImage.value);
+        if (result.success) {
+          showNotification('图片已成功保存到: ' + result.filePath, 'success');
+        } else {
+          showNotification(result.message || '保存失败', 'error');
+        }
+      } catch (error) {
+        showNotification('保存图片时出错: ' + error.message, 'error');
+      }
+    };
+    
+    // 复制图片URL到剪贴板
+    const copyImageUrl = () => {
+      if (!generatedImage.value) return;
+      
+      navigator.clipboard.writeText(generatedImage.value)
+        .then(() => {
+          showNotification('图片链接已复制到剪贴板', 'success');
+        })
+        .catch(err => {
+          showNotification('复制失败: ' + err.message, 'error');
+        });
+    };
+    
+    // 显示通知
     const showNotification = (message, type = 'success') => {
       notification.value = { message, type };
       setTimeout(() => {
@@ -98,44 +131,11 @@ export default {
       }, 3000);
     };
     
-    const saveImageToLocal = async () => {
-      try {
-        if (!store.getters.getGeneratedImage) return;
-        
-        const result = await window.electronAPI.saveImage(store.getters.getGeneratedImage);
-        
-        if (result.success) {
-          showNotification(`图片已保存到: ${result.filePath}`);
-        } else {
-          showNotification(result.message || '保存失败', 'error');
-        }
-      } catch (error) {
-        console.error('Error saving image:', error);
-        showNotification('保存图片时出错', 'error');
-      }
-    };
-    
-    const copyImageUrl = async () => {
-      try {
-        const imageUrl = store.getters.getGeneratedImage;
-        if (!imageUrl) {
-          showNotification('没有可复制的图片链接', 'error');
-          return;
-        }
-        
-        await navigator.clipboard.writeText(imageUrl);
-        showNotification('图片链接已复制到剪贴板');
-      } catch (error) {
-        console.error('复制链接失败:', error);
-        showNotification('复制链接失败', 'error');
-      }
-    };
-
     return {
-      generatedImage: computed(() => store.getters.getGeneratedImage),
+      generatedImage,
       isLoading,
-      notification,
       imageSize,
+      notification,
       resetSize,
       handleImageLoad,
       saveImageToLocal,
@@ -144,6 +144,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 /* 添加标题样式 */
