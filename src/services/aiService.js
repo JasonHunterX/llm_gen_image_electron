@@ -30,15 +30,16 @@ async function generateWithOllama(prompt, settings, imageParams) {
       }
     });
     
-    return extractImageUrl(response.data.response);
+    // 修改这里，将 imageParamsString 传递给 extractImageUrl 函数
+    return extractImageUrl(response.data.response, imageParamsString);
   } catch (error) {
     console.error("Ollama生成图片时出错:", error);
     throw new Error(error.message || "使用Ollama生成图片时出错");
   }
 }
 
-// 从Ollama响应中提取图片URL的辅助函数
-function extractImageUrl(responseText) {
+// 修改 extractImageUrl 函数，接收 imageParamsString 参数
+function extractImageUrl(responseText, imageParamsString) {
   // 首先移除所有 <think> 标签及其内容
   responseText = responseText.replace(/<think>[\s\S]*?<\/think>/g, '');
   
@@ -75,8 +76,7 @@ function extractImageUrl(responseText) {
     const englishDescription = responseText.replace(/[\u4e00-\u9fa5]/g, '').trim();
     const cleanDescription = englishDescription.replace(/[^\w\s]/g, ' ').trim().replace(/\s+/g, '%20');
     
-    // 使用传入的图片参数构建URL
-    const imageParamsString = 'width=1024&height=1024&seed=100&model=flux&nologo=true';
+    // 使用传入的图片参数构建URL，而不是硬编码的参数
     return `https://image.pollinations.ai/prompt/${cleanDescription}?${imageParamsString}`;
   }
   
