@@ -65,28 +65,24 @@ export default {
   padding: 0.75rem 2rem;
   font-size: 1.1rem;
   border-radius: 12px;
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  background: linear-gradient(135deg, #7ab55c 0%, #68a14a 100%);
   color: white;
   font-weight: 600;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 180px;
+  box-shadow: 0 4px 6px rgba(122, 181, 92, 0.2);
 }
 
 .generate-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
-}
-
-.generate-btn:active:not(:disabled) {
-  transform: translateY(0);
+  box-shadow: 0 10px 15px rgba(122, 181, 92, 0.3);
 }
 
 .generate-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-  background: linear-gradient(135deg, #a5a6f6 0%, #9d97f5 100%);
+  background: linear-gradient(135deg, #a8d5a8 0%, #95c595 100%);
 }
 
 .loading-spinner {

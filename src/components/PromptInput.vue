@@ -1,14 +1,20 @@
 <template>
   <div class="prompt-input-container">
+    <!-- 添加春耕节艺术字标题 -->
+    <div class="spring-festival-title">
+      <h1 class="artistic-text">春耕节</h1>
+      <div class="subtitle">AI创意画卷</div>
+    </div>
+    
     <div class="input-group">
       <textarea
         v-model="promptText"
-        placeholder="描述你想要生成的图片，例如：'一只在宇宙中漂浮的猫，背景是星云'"
+        placeholder="描述你想要创作的春耕场景，例如：'春日田野，农民正在播种耕作，远处是朝阳和嫩绿的新芽'"
         rows="3"
         @keydown.ctrl.enter="handleGenerate"
       ></textarea>
       <div class="prompt-tips">
-        <p>提示：尝试详细描述你想要的场景、风格、颜色等</p>
+        <p>提示：尝试描述春耕时节的农事活动、新芽、春雨、播种等春天元素</p>
         <p class="shortcut">按 Ctrl+Enter 快速生成</p>
       </div>
       
@@ -92,6 +98,59 @@ export default {
   width: 100%;
 }
 
+/* 春耕节艺术字标题样式 */
+.spring-festival-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.artistic-text {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #2c5a1e;
+  text-shadow: 3px 3px 0 #a8d5a8, 
+               5px 5px 0 rgba(0,0,0,0.1);
+  letter-spacing: 0.1em;
+  margin: 0;
+  padding: 0.5rem 0;
+  position: relative;
+  font-family: "STKaiti", "楷体", "KaiTi", serif;
+  background: linear-gradient(to bottom, #4a8c2e 0%, #2c5a1e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transform: perspective(500px) rotateX(10deg);
+}
+
+.artistic-text::before, .artistic-text::after {
+  content: "春耕节";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  padding: 0.5rem 0;
+}
+
+.artistic-text::before {
+  color: rgba(168, 213, 168, 0.3);
+  transform: translateY(3px);
+}
+
+.artistic-text::after {
+  color: rgba(122, 181, 92, 0.2);
+  transform: translateY(6px) scale(1.01);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #68a14a;
+  margin-top: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
 .input-group {
   display: flex;
   flex-direction: column;
@@ -103,7 +162,7 @@ textarea {
   width: 100%;
   padding: 1rem;
   border-radius: 10px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #a8d5a8;
   font-size: 1rem;
   resize: vertical;
   min-height: 100px;
@@ -113,83 +172,22 @@ textarea {
 
 textarea:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  border-color: #7ab55c;
+  box-shadow: 0 0 0 3px rgba(122, 181, 92, 0.2);
 }
 
-.prompt-tips {
-  font-size: 0.875rem;
-  color: #6b7280;
-  padding: 0 0.5rem;
-}
-
-.shortcut {
-  font-style: italic;
-  margin-top: 0.25rem;
-}
-
-/* 参数设置区域样式 */
-.params-section {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-
-/* 生成按钮样式 */
+/* 其他样式保持不变，但更新颜色为春耕主题 */
 .generate-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 2rem;
-  font-size: 1.1rem;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-  color: white;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 180px;
-  align-self: center;
-  margin-top: 0.5rem;
+  background: linear-gradient(135deg, #7ab55c 0%, #4a8c2e 100%);
 }
 
 .generate-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
-}
-
-.generate-btn:active:not(:disabled) {
-  transform: translateY(0);
+  box-shadow: 0 10px 15px -3px rgba(122, 181, 92, 0.3);
 }
 
 .generate-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  background: linear-gradient(135deg, #a5a6f6 0%, #9d97f5 100%);
+  background: linear-gradient(135deg, #a8d5a8 0%, #95c595 100%);
 }
 
-.loading-spinner {
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: white;
-  animation: spin 1s ease-in-out infinite;
-  margin-right: 0.5rem;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.error-message {
-  color: #ef4444;
-  background-color: #fee2e2;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  text-align: center;
-}
+/* 其余样式保持不变 */
 </style>

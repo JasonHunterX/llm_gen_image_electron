@@ -1,17 +1,21 @@
 <template>
   <div class="app-container">
     <!-- 可拖动区域 -->
-    <div class="app-titlebar">
-      <!-- <div class="window-title">班大师Ai研究所</div> -->
+    <div class="app-titlebar" style="-webkit-app-region: drag">
+      <div class="titlebar-content">
+        <!-- 预留拖动空间 -->
+      </div>
     </div>
     
-    <!-- 不可拖动的内容区域 -->
+    <!-- 其他内容保持不变 -->
     <div class="app-content-wrapper">
       <header class="app-header">
-        <h1>班大师Ai研究所</h1>
-        <button class="settings-btn" @click="openSettings">
-          <span class="icon">⚙️</span>
-        </button>
+        <div class="header-content">
+          <h1>班大师Ai研究所</h1>
+          <button class="settings-btn" @click="openSettings">
+            <span class="icon">⚙️</span>
+          </button>
+        </div>
       </header>
       <main class="app-content">
         <HomeView />
@@ -65,95 +69,78 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding-top: 50px;
-  padding-bottom: 50px;
+  background: linear-gradient(135deg, #e6f3e6 0%, #f0f7ea 100%);
 }
 
-/* 可拖动区域样式 */
+/* 添加拖动区域样式 */
 .app-titlebar {
-  height: 40px;
-  background-color: #2e3440; /* 深色背景，明显区分 */
-  color: white;
-  display: flex;
-  align-items: center;
-  padding: 0 15px;
-  -webkit-app-region: drag; /* 使区域可拖动 */
-  user-select: none; /* 防止文本选择 */
-  position: fixed;
-  width: 100%;
-  top: 0;
-  left: 0;
+  height: 30px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid #a8d5a8;
+  position: relative;
+  z-index: 1000;
 }
 
-.window-title {
-  font-size: 14px;
-  font-weight: 500;
+.titlebar-content {
+  height: 100%;
+  padding: 0 1rem;
 }
 
-/* 不可拖动内容区域 */
-.app-content-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: transparent; /* 保持原有背景 */
-  -webkit-app-region: no-drag; /* 确保内容区域不可拖动 */
+/* 确保按钮区域不可拖动 */
+.settings-btn {
+  -webkit-app-region: no-drag;
 }
 
-.app-header {
+/* 添加新的样式 */
+.header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  -webkit-app-region: no-drag;
+  width: 100%;
+  padding: 0 2rem;
 }
 
-/* 确保按钮可以点击 */
-.settings-btn {
-  -webkit-app-region: no-drag;
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2c5a1e;
 }
 
 .settings-btn {
   background: none;
   border: none;
-  font-size: 1.5rem;
-  padding: 0.5rem;
+  font-size: 1.2rem;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
 }
 
 .settings-btn:hover {
-  transform: rotate(45deg);
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
-.icon {
-  display: inline-block;
+.app-header {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #a8d5a8;
 }
 
 .app-header h1 {
-  margin: 0;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #333;
-  letter-spacing: 1px;
+  color: #2c5a1e;
+  font-size: 1.8rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.app-content {
-  flex: 1;
-  padding: 2rem;
+.settings-btn {
+  background-color: #7ab55c;
 }
 
 .app-footer {
+  background-color: rgba(255, 255, 255, 0.9);
   padding: 1rem;
   text-align: center;
-  font-size: 0.9rem;
-  color: #666;
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  color: #2c5a1e;
+  border-top: 1px solid #a8d5a8;
 }
 </style>

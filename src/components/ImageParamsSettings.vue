@@ -1,6 +1,6 @@
 <template>
   <div class="image-params-settings">
-    <h3 class="params-title">图片生成参数</h3>
+    <h3 class="params-title">春耕图片参数</h3>
     
     <div class="params-form">
       <div class="form-group">
@@ -29,7 +29,7 @@
         />
       </div>
       
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label for="seed">随机种子</label>
         <div class="input-with-button">
           <input 
@@ -42,7 +42,7 @@
           />
           <button @click="randomizeSeed" class="random-btn">随机</button>
         </div>
-      </div>
+      </div> -->
       
       <div class="form-group">
         <label for="model">模型</label>
@@ -56,7 +56,7 @@
           <option value="turbo">Turbo</option>
         </select>
       </div>
-      
+<!--       
       <div class="form-group checkbox">
         <input 
           type="checkbox" 
@@ -74,7 +74,7 @@
           @change="updateParams"
         />
         <label for="enhance">提升质量</label>
-      </div>
+      </div> -->
     </div>
     
     <div class="actions">
@@ -142,79 +142,75 @@ export default {
 
 <style scoped>
 .image-params-settings {
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 15px -1px rgba(122, 181, 92, 0.15);
   margin-bottom: 1.5rem;
+  border: 1px solid #e6f3e6;
 }
 
 .params-title {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  color: #1f2937;
+  color: #2c5a1e;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid #a8d5a8;
   padding-bottom: 0.75rem;
+  text-align: center;
+  font-family: "STKaiti", "楷体", "KaiTi", serif;
 }
 
 .params-form {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
+  background-color: rgba(248, 252, 245, 0.8);
+  padding: 1.5rem;
+  border-radius: 8px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-}
-
-.input-with-button {
-  display: flex;
   gap: 0.5rem;
-}
-
-.input-with-button input {
-  flex: 1;
-}
-
-.form-group.checkbox {
-  flex-direction: row;
-  align-items: center;
-  padding: 0.5rem 0;
 }
 
 label {
   font-size: 0.95rem;
-  color: #374151;
+  color: #4a8c2e;
   font-weight: 500;
 }
 
 input[type="number"], select {
   padding: 0.625rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #a8d5a8;
   border-radius: 8px;
   font-size: 0.95rem;
   transition: all 0.2s ease;
-  background-color: #f9fafb;
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 input[type="number"]:focus, select:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  border-color: #7ab55c;
+  box-shadow: 0 0 0 3px rgba(122, 181, 92, 0.2);
+}
+
+.checkbox {
+  flex-direction: row;
+  align-items: center;
 }
 
 input[type="checkbox"] {
   width: 1.2rem;
   height: 1.2rem;
   margin-right: 0.75rem;
-  accent-color: #6366f1;
+  accent-color: #7ab55c;
 }
 
 .random-btn {
-  background-color: #6366f1;
+  background-color: #7ab55c;
   color: white;
   border: none;
   border-radius: 8px;
@@ -227,22 +223,23 @@ input[type="checkbox"] {
 }
 
 .random-btn:hover {
-  background-color: #4f46e5;
+  background-color: #68a14a;
   transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(122, 181, 92, 0.2);
 }
 
 .actions {
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e6f3e6;
   display: flex;
   justify-content: flex-end;
 }
 
 .reset-params-btn {
-  background-color: #f3f4f6;
-  color: #4b5563;
-  border: 1px solid #e5e7eb;
+  background-color: #f8fcf5;
+  color: #4a8c2e;
+  border: 1px solid #a8d5a8;
   border-radius: 8px;
   padding: 0.625rem 1.25rem;
   font-size: 0.95rem;
@@ -252,14 +249,16 @@ input[type="checkbox"] {
 }
 
 .reset-params-btn:hover {
-  background-color: #e5e7eb;
-  color: #1f2937;
+  background-color: #e6f3e6;
+  color: #2c5a1e;
+  border-color: #7ab55c;
 }
 
 @media (max-width: 768px) {
   .params-form {
     grid-template-columns: 1fr;
     gap: 1rem;
+    padding: 1rem;
   }
   
   .image-params-settings {

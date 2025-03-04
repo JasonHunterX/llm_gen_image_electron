@@ -12,7 +12,7 @@
               <div></div>
               <div></div>
             </div>
-            <p>正在生成精美图片...</p>
+            <p>正在塑造...</p>
           </div>
           <img 
             v-if="generatedImage" 
@@ -28,7 +28,7 @@
       <div class="controls-section">
         <!-- 尺寸控制器 -->
         <div class="control-group">
-          <h3 class="control-title">图片尺寸调整</h3>
+          <h3 class="control-title">尺寸调整</h3>
           <div class="size-controller">
             <div class="size-label">尺寸: {{ imageSize }}%</div>
             <input 
@@ -45,7 +45,7 @@
         
         <!-- 操作按钮 -->
         <div class="control-group">
-          <h3 class="control-title">图片操作</h3>
+          <h3 class="control-title">操作</h3>
           <div class="actions">
             <button @click="saveImageToLocal" class="save-btn">
               <span class="icon">💾</span> 保存到本地

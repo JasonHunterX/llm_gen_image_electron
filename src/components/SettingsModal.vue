@@ -2,7 +2,7 @@
   <div class="settings-modal-overlay" v-if="isOpen" @click="closeModal">
     <div class="settings-modal-content" @click.stop>
       <div class="settings-modal-header">
-        <h2><span class="icon">⚙️</span> 设置</h2>
+        <h2><span class="icon">🌱</span> 春耕节创意设置</h2>
         <button class="close-btn" @click="closeModal">×</button>
       </div>
       
@@ -226,16 +226,17 @@ export default {
 }
 
 .settings-modal-content {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
   width: 90%;
   max-width: 600px;
   max-height: 90vh;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 25px 50px -12px rgba(122, 181, 92, 0.25);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   animation: modalSlideIn 0.3s ease-out;
+  border: 1px solid #e6f3e6;
 }
 
 @keyframes modalSlideIn {
@@ -254,8 +255,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
-  background-color: #f8fafc;
+  border-bottom: 1px solid #a8d5a8;
+  background-color: #f0f7ea;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -264,17 +265,18 @@ export default {
 .settings-modal-header h2 {
   margin: 0;
   font-size: 1.5rem;
-  color: #1e293b;
+  color: #2c5a1e;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-family: "STKaiti", "楷体", "KaiTi", serif;
 }
 
 .close-btn {
   background: none;
   border: none;
   font-size: 1.75rem;
-  color: #64748b;
+  color: #4a8c2e;
   cursor: pointer;
   padding: 0.5rem;
   transition: all 0.2s ease;
@@ -287,30 +289,34 @@ export default {
 }
 
 .close-btn:hover {
-  background-color: #f1f5f9;
-  color: #1e293b;
+  background-color: #e6f3e6;
+  color: #2c5a1e;
 }
 
 .settings-modal-body {
   padding: 1.5rem;
   flex: 1;
   overflow-y: auto;
+  background-color: #f8fcf5;
 }
 
 .settings-group {
-  background-color: #f8fafc;
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+  border: 1px solid #e6f3e6;
 }
 
 .settings-group h3 {
   font-size: 1.25rem;
-  color: #1e293b;
+  color: #2c5a1e;
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  border-bottom: 1px solid #a8d5a8;
+  padding-bottom: 0.5rem;
 }
 
 .form-group {
@@ -335,9 +341,9 @@ export default {
 }
 
 .styled-input:focus, .styled-select:focus {
-  border-color: #4f46e5;
+  border-color: #7ab55c;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  box-shadow: 0 0 0 3px rgba(122, 181, 92, 0.1);
 }
 
 .api-url-input {
@@ -346,7 +352,7 @@ export default {
 }
 
 .fetch-models-btn {
-  background-color: #4f46e5;
+  background-color: #7ab55c;
   color: white;
   border: none;
   border-radius: 8px;
@@ -362,7 +368,7 @@ export default {
 }
 
 .fetch-models-btn:not(:disabled):hover {
-  background-color: #4338ca;
+  background-color: #68a14a;
   transform: translateY(-1px);
 }
 
@@ -428,13 +434,13 @@ export default {
 }
 
 .save-btn {
-  background-color: #4f46e5;
+  background-color: #7ab55c;
   color: white;
   border: none;
 }
 
 .save-btn:hover {
-  background-color: #4338ca;
+  background-color: #68a14a;
   transform: translateY(-1px);
 }
 
