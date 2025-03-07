@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { generateImage } from '../services/aiService';
+import { generateImage, generateAudio } from '../services/aiService';  // Add generateAudio import here
 
 export default createStore({
   state: {
@@ -23,9 +23,21 @@ export default createStore({
         enhance:false
       }
     },
-    notification: null
+    notification: null,
+    generatedAudio: null,
+    isAudioLoading: false,
+    audioText: null,
   },
   mutations: {
+    setAudioText(state, text) {
+      state.audioText = text;
+    },
+    setGeneratedAudio(state, audioUrl) {
+      state.generatedAudio = audioUrl;
+    },
+    setAudioLoading(state, status) {
+      state.isAudioLoading = status;
+    },
     setPrompt(state, prompt) {
       state.prompt = prompt;
     },
@@ -70,6 +82,29 @@ export default createStore({
     }
   },
   actions: {
+    async generateAudioFromPrompt({ commit, state }) {
+      try {
+        commit('setLoading', true);
+        commit('setAudioLoading', true); // 添加这行
+        commit('clearError');
+        
+        // 假设 generateAudio 函数返回 { audioUrl, audioText }
+        const result = await generateAudio(state.prompt, state.settings);
+        
+        console.log('生成的音频结果:', result); // 添加调试日志
+        
+        commit('setGeneratedAudio', result.audioUrl);
+        commit('setAudioText', result.audioText); // 设置音频文本
+        
+        commit('setLoading', false);
+        commit('setAudioLoading', false); // 添加这行
+      } catch (error) {
+        console.error('生成音频失败:', error);
+        commit('setError', error.message);
+        commit('setLoading', false);
+        commit('setAudioLoading', false); // 添加这行
+      }
+    },
     async generateImageFromPrompt({ commit, state }) {
       try {
         commit('clearGeneratedImage'); // 清空之前的图片
@@ -116,14 +151,22 @@ export default createStore({
     }
   },
   getters: {
-    getPrompt: state => state.prompt,
-    getGeneratedImage: state => state.generatedImage,
-    isLoading: state => state.isLoading,
-    isImageLoading: state => state.isImageLoading,
-    getError: state => state.error,
-    getHistory: state => state.history,
-    getSettings: state => state.settings,
-    getNotification: state => state.notification,  // 添加逗号
-    getImageParams: state => state.settings.imageParams  // 移到正确位置，移除多余的逗号
+    getGeneratedAudio: (state) => state.generatedAudio,
+    isAudioLoading: (state) => state.isAudioLoading,
+    getAudioText: (state) => state.audioText,
+    getPrompt: (state) => state.prompt,
+    getGeneratedImage: (state) => state.generatedImage,
+    isLoading: (state) => state.isLoading,
+    isImageLoading: (state) => state.isImageLoading,
+    getError: (state) => state.error,
+    getHistory: (state) => state.history, // 移到这里
+    getSettings: (state) => state.settings, // 移到这里
+    getNotification: (state) => state.notification, // 移到这里
+    getImageParams: (state) => state.settings.imageParams
   }
-});
+  // 删除下面这几行重复的 getters
+  // getHistory: state => state.history,
+  // getSettings: state => state.settings,
+  // getNotification: state => state.notification,
+  // getImageParams: state => state.settings.imageParams
+})

@@ -8,7 +8,28 @@
       
       <div class="settings-modal-body">
         <div class="settings-group">
-          <h3><span class="icon">🤖</span> Ollama API设置</h3>
+          <h3><span class="icon">🤖</span> 模型服务设置</h3>
+          <div class="form-group">
+            <label for="modelService">选择模型服务</label>
+            <select 
+              id="modelService" 
+              v-model="selectedService" 
+              class="styled-select"
+            >
+              <option 
+                v-for="(service, key) in modelServices" 
+                :key="key" 
+                :value="key"
+              >
+                {{ service.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      
+        <!-- Ollama 设置 -->
+        <div class="settings-group" v-if="selectedService === 'ollama'">
+          <h3><span class="icon">🚀</span> Ollama API设置</h3>
           <div class="form-group">
             <label for="ollamaUrl">API 地址</label>
             <div class="api-url-input">
@@ -51,6 +72,49 @@
             </p>
           </div>
         </div>
+      
+        <!-- Deepseek 设置 -->
+        <div class="settings-group" v-if="selectedService === 'deepseek'">
+          <h3><span class="icon">🎯</span> Deepseek API设置</h3>
+          <div class="form-group">
+            <label for="deepseekApiKey">API Key</label>
+            <div class="api-url-input">
+              <input 
+                type="password" 
+                id="deepseekApiKey" 
+                v-model="settings.deepseek.apiKey" 
+                placeholder="请输入 Deepseek API Key"
+                class="styled-input"
+              />
+              <button 
+                class="fetch-models-btn"
+                :class="{ 'loading': isLoading }" 
+                @click="verifyDeepseekApiKey" 
+                :disabled="isLoading || !settings.deepseek.apiKey"
+              >
+                <span class="icon">{{ isLoading ? '🔄' : '🔑' }}</span>
+                {{ isLoading ? '验证中...' : '验证密钥' }}
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="deepseekModel">选择模型</label>
+            <select 
+              id="deepseekModel" 
+              v-model="settings.deepseek.modelName" 
+              class="styled-select"
+            >
+              <option value="" disabled>请选择模型</option>
+              <option 
+                v-for="model in modelServices.deepseek.models" 
+                :key="model.id" 
+                :value="model.id"
+              >
+                {{ model.name }}
+              </option>
+            </select>
+          </div>
+        </div>
       </div>
       
       <div class="settings-modal-footer">
@@ -68,6 +132,7 @@
 <script>
 import { ref, reactive, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import OpenAI from 'openai';  // 添加 OpenAI 导入
 
 export default {
   name: 'SettingsModal',
@@ -82,35 +147,129 @@ export default {
     const store = useStore();
     const isLoading = ref(false);
     const ollamaModels = ref([]);
+    const selectedService = ref('ollama'); // 默认选择 ollama
+
+    // 定义支持的模型服务
+    const modelServices = {
+      ollama: {
+        name: 'Ollama',
+        models: [] // 动态获取
+      },
+      deepseek: {
+        name: 'Deepseek',
+        models: [
+          { id: 'deepseek-coder', name: 'Deepseek Coder' },
+          { id: 'deepseek-vision', name: 'Deepseek Vision' },
+          { id: 'deepseek-chat', name: 'Deepseek Chat' }
+        ]
+      }
+    };
+
+    // 更新 Deepseek API 验证函数
+    const verifyDeepseekApiKey = async () => {
+      if (!settings.deepseek.apiKey) {
+        store.dispatch('showNotification', {
+          message: '请输入 Deepseek API Key',
+          type: 'error'
+        });
+        return false;
+      }
+
+      isLoading.value = true;
+      try {
+        const openai = new OpenAI({
+          baseURL: 'https://api.deepseek.com',
+          apiKey: settings.deepseek.apiKey,
+          dangerouslyAllowBrowser: true  // 添加此配置以允许浏览器端使用
+        });
+
+        // 直接获取模型列表，不需要调用 next()
+        const models = await openai.models.list();
+        
+        // 检查是否成功获取到模型列表
+        if (models && models.data && models.data.length > 0) {
+          store.dispatch('showNotification', {
+            message: 'Deepseek API Key 验证成功',
+            type: 'success'
+          });
+          return true;
+        } else {
+          throw new Error('未能获取到模型列表');
+        }
+      } catch (error) {
+        console.error('Deepseek API 验证失败:', error);
+        store.dispatch('showNotification', {
+          message: `验证失败: ${error.message}`,
+          type: 'error'
+        });
+        return false;
+      } finally {
+        isLoading.value = false;
+      }
+    };
+
+    // 修改保存设置函数
+    const saveSettings = async () => {
+      // 如果选择了 Deepseek，先验证 API Key
+      if (selectedService.value === 'deepseek') {
+        const isValid = await verifyDeepseekApiKey();
+        if (!isValid) return;
+      }
+
+      const settingsToSave = {
+        ...settings,
+        selectedService: selectedService.value
+      };
+      
+      localStorage.setItem('aiImageGeneratorSettings', JSON.stringify(settingsToSave));
+      store.dispatch('updateSettings', settingsToSave);
+      
+      store.dispatch('showNotification', {
+        message: '设置已保存',
+        type: 'success'
+      });
+      
+      closeModal();
+    };
     
-    // 设置对象 - 移除了deepseek相关配置
+    // 设置对象 - 添加 deepseek 配置
     const settings = reactive({
       ollama: {
         apiUrl: 'http://localhost:11434',
         modelName: ''
+      },
+      deepseek: {
+        apiKey: '',
+        modelName: ''
       }
     });
-    
-    // 初始化时从存储加载设置
-    onMounted(() => {
-      loadSettings();
-    });
-    
-    // 加载设置
-    // 修改 loadSettings 函数来处理模型回显
+
+    // 修改加载设置函数
     const loadSettings = async () => {
       const savedSettings = localStorage.getItem('aiImageGeneratorSettings');
       if (savedSettings) {
         const parsedSettings = JSON.parse(savedSettings);
-        settings.ollama = { ...settings.ollama, ...parsedSettings.ollama };
         
-        // 如果有已保存的API地址和模型名称，尝试获取模型列表
-        if (settings.ollama.apiUrl && settings.ollama.modelName) {
+        // 合并已保存的设置
+        if (parsedSettings.ollama) {
+          settings.ollama = { ...settings.ollama, ...parsedSettings.ollama };
+        }
+        if (parsedSettings.deepseek) {
+          settings.deepseek = { ...settings.deepseek, ...parsedSettings.deepseek };
+        }
+        
+        // 设置当前选中的服务
+        if (parsedSettings.selectedService) {
+          selectedService.value = parsedSettings.selectedService;
+        }
+        
+        // 如果是 ollama 且有配置，获取模型列表
+        if (selectedService.value === 'ollama' && settings.ollama.apiUrl) {
           await fetchOllamaModels();
         }
       }
     };
-    
+
     // 获取Ollama模型列表
     const fetchOllamaModels = async () => {
       if (!settings.ollama.apiUrl) {
@@ -130,6 +289,7 @@ export default {
         
         const data = await response.json();
         ollamaModels.value = data.models || [];
+        modelServices.ollama.models = ollamaModels.value;
         
         if (ollamaModels.value.length > 0) {
           store.dispatch('showNotification', {
@@ -173,25 +333,7 @@ export default {
       
       return `${size.toFixed(2)} ${units[unitIndex]}`;
     };
-    
-    // 保存设置
-    const saveSettings = () => {
-      // 保存到localStorage
-      localStorage.setItem('aiImageGeneratorSettings', JSON.stringify(settings));
-      
-      // 更新Vuex状态
-      store.dispatch('updateSettings', settings);
-      
-      // 显示成功通知
-      store.dispatch('showNotification', {
-        message: '设置已保存',
-        type: 'success'
-      });
-      
-      // 关闭模态窗口
-      closeModal();
-    };
-    
+
     // 关闭模态窗口
     const closeModal = () => {
       emit('close');
@@ -201,7 +343,10 @@ export default {
       settings,
       isLoading,
       ollamaModels,
+      selectedService,
+      modelServices,
       fetchOllamaModels,
+      verifyDeepseekApiKey,  // 添加这一行
       formatSize,
       saveSettings,
       closeModal

@@ -15,15 +15,13 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import PromptInput from '../components/PromptInput.vue';
-// 移除 ImageGenerator 导入
 import ImagePreview from '../components/ImagePreview.vue';
 
 export default {
   name: 'HomeView',
   components: {
     PromptInput,
-    // 移除 ImageGenerator
-    ImagePreview
+    ImagePreview,
   },
   setup() {
     const store = useStore();

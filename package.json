@@ -28,6 +28,7 @@
     "axios": "^1.8.1",
     "electron-is-dev": "^2.0.0",
     "langchain": "^0.0.196",
+    "openai": "^4.86.2",
     "vue": "^3.3.8",
     "vue-router": "^4.2.5",
     "vuex": "^4.1.0"
@@ -50,11 +51,17 @@
       "target": [
         {
           "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         },
         {
           "target": "zip",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ],
       "artifactName": "${productName}-${version}-${arch}.${ext}"
@@ -63,17 +70,25 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "portable",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "linux": {
-      "target": ["AppImage", "deb", "rpm"],
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ],
       "category": "Graphics",
       "artifactName": "${productName}-${version}-${arch}.${ext}"
     },

@@ -25,7 +25,7 @@
           <span class="loading-spinner"></span>
           生成中...
         </span>
-        <span v-else>生成图片</span>
+        <span v-else>开始创作</span>
       </button>
       
       <div v-if="error" class="error-message">
@@ -70,10 +70,14 @@ export default {
       store.dispatch('updatePrompt', newValue);
     });
     
-    const handleGenerate = () => {
-      if (promptText.value.trim() && !isLoading.value) {
-        store.dispatch('generateImageFromPrompt');
-      }
+    const handleGenerate = async () => {
+      if (!hasPrompt.value || isLoading.value) return;
+      
+      // 同时触发图片和音频生成
+      await Promise.all([
+        store.dispatch('generateImageFromPrompt'),
+        store.dispatch('generateAudioFromPrompt')
+      ]);
     };
     
     return {
