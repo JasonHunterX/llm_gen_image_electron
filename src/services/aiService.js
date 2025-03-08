@@ -121,18 +121,21 @@ function extractImageUrl(responseText, imageParamsString) {
 // 生成音频的函数
 export async function generateAudio(prompt, settings) {
   if (settings.selectedService === 'deepseek') {
-    return await generateAudioWithDeepseek(prompt, settings.deepseek);
+    return await generateAudioWithDeepseek(prompt, settings.deepseek, settings.imageParams);
   }
-  return await generateAudioWithOllama(prompt, settings.ollama);
+  return await generateAudioWithOllama(prompt, settings.ollama, settings.imageParams);
 }
 
 // Ollama模型的音频生成
-async function generateAudioWithOllama(prompt, settings) {
+async function generateAudioWithOllama(prompt, settings, imageParams) {
   try {
+    // 获取用户选择的voice参数，如果未设置则默认使用nova
+    const voice = imageParams?.voice || 'nova';
+    
     const response = await axios.post(`${settings.apiUrl}/api/generate`, {
       model: settings.modelName,
       prompt: `你是一个AI故事生成机器人，我给你这个提示："${prompt}"，请用你的想象力去简短的续写这段故事，然后将续写的内容充到下面url的占位符中:
-[点击播放音频](https://text.pollinations.ai/{query}?model=openai-audio&voice=nova)`,
+[点击播放音频](https://text.pollinations.ai/{query}?model=openai-audio&voice=${voice})`,
       stream: false,
       options: {
         temperature: 0.7,
@@ -198,8 +201,11 @@ function extractAudioText(content) {
 }
 
 // Deepseek的音频生成
-async function generateAudioWithDeepseek(prompt, settings) {
+async function generateAudioWithDeepseek(prompt, settings, imageParams) {
   try {
+    // 获取用户选择的voice参数，如果未设置则默认使用nova
+    const voice = imageParams?.voice || 'nova';
+    
     const openai = new OpenAI({
       baseURL: 'https://api.deepseek.com',
       apiKey: settings.apiKey,
@@ -211,7 +217,7 @@ async function generateAudioWithDeepseek(prompt, settings) {
       messages: [{
         role: "user",
         content: `你现在是一个ai故事生成机器人，我给你这个提示："${prompt}"，请用你的想象力去简短的续写这段故事，然后将续写的内容充到下面url的占位符中:
-[点击播放音频](https://text.pollinations.ai/{query}?model=openai-audio&voice=nova)`
+[点击播放音频](https://text.pollinations.ai/{query}?model=openai-audio&voice=${voice})`
       }]
     });
 

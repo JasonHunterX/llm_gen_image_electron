@@ -73,7 +73,9 @@ export default {
 /* 可拖动区域样式 */
 .app-titlebar {
   height: 40px;
-  background-color: #2e3440; /* 深色背景，明显区分 */
+  background-color: rgba(46, 52, 64, 0.8); /* 半透明深色背景 */
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   color: white;
   display: flex;
   align-items: center;
@@ -84,6 +86,8 @@ export default {
   width: 100%;
   top: 0;
   left: 0;
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 1000;
 }
 
 .window-title {
@@ -148,12 +152,15 @@ export default {
   text-align: center;
   font-size: 0.9rem;
   color: #666;
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: var(--glass-background);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-top: 1px solid var(--glass-border);
+  box-shadow: 0 -4px 16px -8px rgba(31, 38, 135, 0.2);
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
+  z-index: 1000;
 }
 </style>

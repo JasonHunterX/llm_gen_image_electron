@@ -148,6 +148,11 @@ export default {
     const isLoading = ref(false);
     const ollamaModels = ref([]);
     const selectedService = ref('ollama'); // 默认选择 ollama
+    
+    // 在组件挂载时加载设置
+    onMounted(() => {
+      loadSettings();
+    });
 
     // 定义支持的模型服务
     const modelServices = {

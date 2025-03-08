@@ -9,20 +9,35 @@ export default createStore({
     isImageLoading: false,
     error: null,
     history: [],
-    settings: {
-      ollama: {
-        apiUrl: 'http://127.0.0.1:11434',
-        modelName: 'kevin_qwen:latest'
-      },
-      imageParams: {
-        width: 1024,
-        height: 1024,
-        seed: 100,
-        model: 'flux',
-        nologo: true,
-        enhance:false
+    settings: (() => {
+      const savedSettings = localStorage.getItem('aiImageGeneratorSettings');
+      if (savedSettings) {
+        try {
+          return JSON.parse(savedSettings);
+        } catch (e) {
+          console.error('解析保存的设置失败:', e);
+        }
       }
-    },
+      return {
+        selectedService: 'ollama',
+        ollama: {
+          apiUrl: 'http://127.0.0.1:11434',
+          modelName: 'kevin_qwen:latest'
+        },
+        deepseek: {
+          apiKey: '',
+          modelName: ''
+        },
+        imageParams: {
+          width: 1024,
+          height: 1024,
+          seed: 100,
+          model: 'flux',
+          nologo: true,
+          enhance: false
+        }
+      };
+    })(),
     notification: null,
     generatedAudio: null,
     isAudioLoading: false,
